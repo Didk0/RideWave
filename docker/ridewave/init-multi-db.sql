@@ -1,0 +1,2 @@
+CREATE DATABASE riderdb;
+CREATE DATABASE driverdb;

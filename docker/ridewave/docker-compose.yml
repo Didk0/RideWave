@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: ridewave-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-multi-db.sql:/docker-entrypoint-initdb.d/init-multi-db.sql:ro
+
+  mongodb:
+    image: mongo:8
+    container_name: ridewave-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+    volumes:
+      - mongodata:/data/db
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  pgdata:
+  mongodata:

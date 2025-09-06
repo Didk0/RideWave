@@ -1,4 +1,4 @@
-package com.ride.wave.driver.driver;
+package com.ride.wave.driver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

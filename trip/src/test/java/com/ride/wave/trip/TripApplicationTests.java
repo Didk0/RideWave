@@ -1,14 +1,13 @@
-package com.ride.wave.rider.rider;
+package com.ride.wave.trip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RiderApplicationTests {
+class TripApplicationTests {
 
-    @Test
-    void contextLoads() {
-
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }

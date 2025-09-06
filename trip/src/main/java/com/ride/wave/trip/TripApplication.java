@@ -1,4 +1,4 @@
-package com.ride.wave.trip.trip;
+package com.ride.wave.trip;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
