@@ -39,5 +39,5 @@ public class RideRequest {
   @Enumerated(EnumType.STRING)
   private RideStatus status;
 
-  private Instant createdAt;
+  @Builder.Default private Instant createdAt = Instant.now();
 }

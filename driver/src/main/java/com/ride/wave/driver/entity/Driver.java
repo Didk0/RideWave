@@ -32,5 +32,5 @@ public class Driver {
   @Enumerated(EnumType.STRING)
   private DriverStatus status;
 
-  private Instant createdAt;
+  @Builder.Default private Instant createdAt = Instant.now();
 }

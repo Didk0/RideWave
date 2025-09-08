@@ -1,23 +1,20 @@
-package com.ride.wave.trip.trip;
+package com.ride.wave.trip.dto;
 
-import com.ride.wave.trip.TripStatus;
+import com.ride.wave.trip.enums.TripStatus;
 import java.math.BigDecimal;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "trips")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Trip {
+public class TripDto {
 
-  @Id private String id;
+  private String id;
 
   private Long riderId;
   private String riderName;

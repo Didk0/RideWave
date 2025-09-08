@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +30,10 @@ public class Rider {
   private String name;
   private String email;
   private String phone;
-  private Instant createdAt;
+
+  @Builder.Default private Instant createdAt = Instant.now();
 
   @OneToMany(mappedBy = "rider", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<RideRequest> rideRequests;
+  @Builder.Default
+  private List<RideRequest> rideRequests = new ArrayList<>();
 }
