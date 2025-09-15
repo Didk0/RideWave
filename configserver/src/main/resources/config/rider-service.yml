@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: rider
   datasource:
     url: ${POSTGRES_RIDER_URI}
     username: ${POSTGRES_USER}
@@ -22,6 +20,16 @@ management:
     web:
       exposure:
         include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
 server:
   port: 8082
