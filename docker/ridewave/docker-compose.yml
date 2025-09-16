@@ -70,6 +70,7 @@ services:
 
   loki:
     image: grafana/loki:2.9.0
+    container_name: loki
     command: "-config.file=/etc/loki/config.yaml"
     ports:
       - "3100:3100"
