@@ -1,46 +1,31 @@
-#spring:
-#  cloud:
-#    gateway:
-#      server:
-#        webflux:
-#          routes:
-#            - id: driver-service
-#              uri: lb://DRIVER-SERVICE
-#              predicates:
-#                - Path=/api/drivers/**
-#            - id: rider-service
-#              uri: lb://RIDER-SERVICE
-#              predicates:
-#                - Path=/api/riders/**, /api/ride-requests/**
-#            - id: trip-service
-#              uri: lb://TRIP-SERVICE
-#              predicates:
-#                - Path=/api/trips/**
-#            - id: eureka-server
-#              uri: http://localhost:8761
-#              predicates:
-#                - Path=/eureka/main
-#              filters:
-#                - SetPath=/
-#            - id: eureka-server-static
-#              uri: http://localhost:8761
-#              predicates:
-#                - Path=/eureka/**
-
-#logging:
-#  level:
-#    root: info
-#    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
-#    org.springframework.cloud.gateway: TRACE
-
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
   tracing:
     sampling:
       probability: 1.0
+
+# Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      ridewaveBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        slidingWindowType: count_based
 
 server:
   port: 8080

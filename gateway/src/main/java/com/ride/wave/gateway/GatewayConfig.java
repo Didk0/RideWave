@@ -13,11 +13,42 @@ public class GatewayConfig {
 
     return builder
         .routes()
-        .route("driver-service", r -> r.path("/api/drivers/**").uri("lb://DRIVER-SERVICE"))
+        .route(
+            "driver-service",
+            r ->
+                r.path("/api/drivers/**")
+                    .filters(
+                        f ->
+                            f.circuitBreaker(
+                                config ->
+                                    config
+                                        .setName("ridewaveBreaker")
+                                        .setFallbackUri("forward:/fallback/drivers")))
+                    .uri("lb://DRIVER-SERVICE"))
         .route(
             "rider-service",
-            r -> r.path("/api/riders/**", "/api/ride-requests/**").uri("lb://RIDER-SERVICE"))
-        .route("trip-service", r -> r.path("/api/trips/**").uri("lb://TRIP-SERVICE"))
+            r ->
+                r.path("/api/riders/**", "/api/ride-requests/**")
+                    .filters(
+                        f ->
+                            f.circuitBreaker(
+                                config ->
+                                    config
+                                        .setName("ridewaveBreaker")
+                                        .setFallbackUri("forward:/fallback/riders")))
+                    .uri("lb://RIDER-SERVICE"))
+        .route(
+            "trip-service",
+            r ->
+                r.path("/api/trips/**")
+                    .filters(
+                        f ->
+                            f.circuitBreaker(
+                                config ->
+                                    config
+                                        .setName("ridewaveBreaker")
+                                        .setFallbackUri("forward:/fallback/trips")))
+                    .uri("lb://TRIP-SERVICE"))
         .route(
             "eureka-server",
             r ->
