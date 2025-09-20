@@ -1,7 +1,7 @@
 package com.ride.wave.rider.controller;
 
-import com.ride.wave.rider.dto.RiderDto;
-import com.ride.wave.rider.payload.CreateRiderRequest;
+import com.ride.wave.rider.dto.request.CreateRiderRequest;
+import com.ride.wave.rider.dto.response.RiderDto;
 import com.ride.wave.rider.service.RiderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

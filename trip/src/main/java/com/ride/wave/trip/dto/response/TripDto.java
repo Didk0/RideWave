@@ -1,4 +1,4 @@
-package com.ride.wave.trip.dto;
+package com.ride.wave.trip.dto.response;
 
 import com.ride.wave.trip.enums.TripStatus;
 import java.math.BigDecimal;

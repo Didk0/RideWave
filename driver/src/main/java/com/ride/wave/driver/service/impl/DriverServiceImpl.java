@@ -53,6 +53,14 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
+  public List<DriverDto> getAvailableDrivers() {
+
+    return driverRepository.findAllByStatus(DriverStatus.AVAILABLE).stream()
+        .map(driver -> modelMapper.map(driver, DriverDto.class))
+        .toList();
+  }
+
+  @Override
   public DriverDto updateDriver(final Long id, final CreateDriverRequest request) {
 
     final Driver driver =
@@ -72,5 +80,18 @@ public class DriverServiceImpl implements DriverService {
   public void deleteDriver(final Long id) {
 
     driverRepository.deleteById(id);
+  }
+
+  @Override
+  public DriverDto updateDriverStatus(
+      final DriverDto driverToAssign, final DriverStatus driverStatus) {
+
+    driverToAssign.setStatus(driverStatus);
+
+    final Driver updatedDriver = modelMapper.map(driverToAssign, Driver.class);
+
+    driverRepository.save(updatedDriver);
+
+    return modelMapper.map(updatedDriver, DriverDto.class);
   }
 }

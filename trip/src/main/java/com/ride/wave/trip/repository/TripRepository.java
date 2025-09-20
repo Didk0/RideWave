@@ -9,4 +9,6 @@ public interface TripRepository extends MongoRepository<Trip, String> {
   List<Trip> findByRiderId(Long riderId);
 
   List<Trip> findByDriverId(Long driverId);
+
+  List<Trip> findByRiderIdAndDriverId(Long riderId, Long driverId);
 }

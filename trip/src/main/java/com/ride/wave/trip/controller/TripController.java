@@ -1,7 +1,6 @@
 package com.ride.wave.trip.controller;
 
-import com.ride.wave.trip.dto.TripDto;
-import com.ride.wave.trip.payload.CreateTripRequest;
+import com.ride.wave.trip.dto.response.TripDto;
 import com.ride.wave.trip.service.TripService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +20,12 @@ public class TripController {
 
   private final TripService tripService;
 
-  @PostMapping
-  public ResponseEntity<TripDto> createTrip(@RequestBody final CreateTripRequest request) {
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(tripService.createTrip(request));
-  }
+  // Used for testing/debugging
+  //  @PostMapping
+  //  public ResponseEntity<TripDto> createTrip(@RequestBody final RideRequestedEvent event) {
+  //
+  //    return ResponseEntity.status(HttpStatus.CREATED).body(tripService.createTrip(event));
+  //  }
 
   @GetMapping("/{id}")
   public ResponseEntity<TripDto> getTrip(@PathVariable final String id) {

@@ -19,6 +19,8 @@ public class Trip {
 
   @Id private String id;
 
+  private Long rideRequestId;
+
   private Long riderId;
   private String riderName;
   private String riderEmail;

@@ -1,4 +1,4 @@
-package com.ride.wave.rider.dto;
+package com.ride.wave.rider.dto.response;
 
 import com.ride.wave.rider.enums.RideStatus;
 import lombok.AllArgsConstructor;

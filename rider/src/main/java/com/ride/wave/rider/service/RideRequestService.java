@@ -1,7 +1,7 @@
 package com.ride.wave.rider.service;
 
-import com.ride.wave.rider.dto.RideRequestDto;
-import com.ride.wave.rider.payload.CreateRideRequest;
+import com.ride.wave.rider.dto.request.CreateRideRequest;
+import com.ride.wave.rider.dto.response.RideRequestDto;
 import java.util.List;
 
 public interface RideRequestService {
