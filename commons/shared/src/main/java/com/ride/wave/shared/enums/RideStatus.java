@@ -1,4 +1,4 @@
-package com.ride.wave.rider.enums;
+package com.ride.wave.shared.enums;
 
 public enum RideStatus {
   REQUESTED,

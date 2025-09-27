@@ -1,6 +1,6 @@
 package com.ride.wave.rider.entity;
 
-import com.ride.wave.rider.enums.RideStatus;
+import com.ride.wave.shared.enums.RideStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

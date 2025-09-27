@@ -1,6 +1,6 @@
 package com.ride.wave.driver.entity;
 
-import com.ride.wave.driver.enums.DriverStatus;
+import com.ride.wave.shared.enums.DriverStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,4 +33,6 @@ public class Driver {
   private DriverStatus status;
 
   @Builder.Default private Instant createdAt = Instant.now();
+
+  private String lastAssignedTripId;
 }

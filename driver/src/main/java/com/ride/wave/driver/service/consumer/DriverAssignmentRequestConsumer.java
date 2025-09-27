@@ -1,15 +1,15 @@
-package com.ride.wave.driver.service.impl;
+package com.ride.wave.driver.service.consumer;
 
 import static com.ride.wave.shared.constants.KafkaConstants.DRIVER_ASSIGNMENT_REQUESTS_TOPIC;
 import static com.ride.wave.shared.constants.KafkaConstants.DRIVER_SERVICE_GROUP_ID;
 
 import com.ride.wave.driver.dto.DriverDto;
-import com.ride.wave.driver.enums.DriverStatus;
-import com.ride.wave.driver.service.DriverAssignedProducer;
-import com.ride.wave.driver.service.DriverAssignmentRequestConsumer;
 import com.ride.wave.driver.service.DriverService;
+import com.ride.wave.driver.service.producer.DriverAssignedProducer;
 import com.ride.wave.shared.dto.event.DriverAssignedEvent;
 import com.ride.wave.shared.dto.event.DriverAssignmentRequestedEvent;
+import com.ride.wave.shared.enums.DriverStatus;
+import com.ride.wave.shared.kafka.consumer.BaseKafkaConsumer;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,20 +19,23 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class DriverAssignmentRequestConsumerImpl implements DriverAssignmentRequestConsumer {
+public class DriverAssignmentRequestConsumer
+    implements BaseKafkaConsumer<DriverAssignmentRequestedEvent> {
 
   private final DriverService driverService;
   private final DriverAssignedProducer driverAssignedProducer;
 
   @Override
   @KafkaListener(topics = DRIVER_ASSIGNMENT_REQUESTS_TOPIC, groupId = DRIVER_SERVICE_GROUP_ID)
-  public void receiveDriverAssignmentRequestedEvent(final DriverAssignmentRequestedEvent event) {
+  public void receiveEvent(final DriverAssignmentRequestedEvent event) {
 
     log.info("Received Driver Assignment Requested event: {}", event);
 
     final DriverDto driverToAssign =
         driverService.updateDriverStatus(
-            driverService.getAvailableDrivers().getFirst(), DriverStatus.BUSY);
+            driverService.getAvailableDrivers().getFirst(), DriverStatus.ASSIGNED);
+
+    driverService.updateDriverLastAssignedTripId(driverToAssign.getId(), event.tripId());
 
     final DriverAssignedEvent driverAssignedEvent =
         DriverAssignedEvent.builder()

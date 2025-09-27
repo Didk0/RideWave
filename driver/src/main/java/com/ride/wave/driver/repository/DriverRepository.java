@@ -1,7 +1,7 @@
 package com.ride.wave.driver.repository;
 
 import com.ride.wave.driver.entity.Driver;
-import com.ride.wave.driver.enums.DriverStatus;
+import com.ride.wave.shared.enums.DriverStatus;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

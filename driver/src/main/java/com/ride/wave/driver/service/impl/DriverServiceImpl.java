@@ -2,14 +2,16 @@ package com.ride.wave.driver.service.impl;
 
 import com.ride.wave.driver.dto.DriverDto;
 import com.ride.wave.driver.entity.Driver;
-import com.ride.wave.driver.enums.DriverStatus;
 import com.ride.wave.driver.payload.CreateDriverRequest;
 import com.ride.wave.driver.repository.DriverRepository;
 import com.ride.wave.driver.service.DriverService;
+import com.ride.wave.shared.enums.DriverStatus;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class DriverServiceImpl implements DriverService {
   private final ModelMapper modelMapper;
 
   @Override
+  @Transactional
   public DriverDto createDriver(final CreateDriverRequest request) {
 
     final Driver driver =
@@ -34,6 +37,7 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public DriverDto getDriver(final Long id) {
 
     final Driver driver =
@@ -45,6 +49,7 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<DriverDto> getAllDrivers() {
 
     return driverRepository.findAll().stream()
@@ -53,6 +58,7 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<DriverDto> getAvailableDrivers() {
 
     return driverRepository.findAllByStatus(DriverStatus.AVAILABLE).stream()
@@ -61,6 +67,19 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
+  @Transactional(readOnly = true)
+  public DriverDto getDifferentDriver(final Long driverId, final String lastAssignedTripId) {
+
+    return driverRepository.findAllByStatus(DriverStatus.AVAILABLE).stream()
+        .filter(driver -> !driver.getLastAssignedTripId().equals(lastAssignedTripId))
+        .filter(driver -> !driver.getId().equals(driverId))
+        .findFirst()
+        .map(driver -> modelMapper.map(driver, DriverDto.class))
+        .orElse(null);
+  }
+
+  @Override
+  @Transactional
   public DriverDto updateDriver(final Long id, final CreateDriverRequest request) {
 
     final Driver driver =
@@ -77,21 +96,38 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
+  @Transactional
   public void deleteDriver(final Long id) {
 
     driverRepository.deleteById(id);
   }
 
   @Override
+  @Transactional
   public DriverDto updateDriverStatus(
-      final DriverDto driverToAssign, final DriverStatus driverStatus) {
+      final DriverDto driverToUpdate, final DriverStatus driverStatus) {
 
-    driverToAssign.setStatus(driverStatus);
+    driverToUpdate.setStatus(driverStatus);
 
-    final Driver updatedDriver = modelMapper.map(driverToAssign, Driver.class);
+    final Driver updatedDriver = modelMapper.map(driverToUpdate, Driver.class);
 
     driverRepository.save(updatedDriver);
 
     return modelMapper.map(updatedDriver, DriverDto.class);
+  }
+
+  @Override
+  @Transactional
+  public void updateDriverLastAssignedTripId(final Long driverId, final String tripId) {
+
+    final Driver driver =
+        driverRepository
+            .findById(driverId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Driver with id " + driverId + " not found"));
+
+    driver.setLastAssignedTripId(tripId);
+
+    driverRepository.save(driver);
   }
 }

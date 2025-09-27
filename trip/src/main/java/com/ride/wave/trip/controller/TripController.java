@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,12 +21,29 @@ public class TripController {
 
   private final TripService tripService;
 
-  // Used for testing/debugging
-  //  @PostMapping
-  //  public ResponseEntity<TripDto> createTrip(@RequestBody final RideRequestedEvent event) {
-  //
-  //    return ResponseEntity.status(HttpStatus.CREATED).body(tripService.createTrip(event));
-  //  }
+  @PatchMapping("/start")
+  public ResponseEntity<Void> startTrip(@RequestParam final String tripId) {
+
+    tripService.startTrip(tripId);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @PatchMapping("/reject")
+  public ResponseEntity<Void> rejectTrip(@RequestParam final String tripId) {
+
+    tripService.rejectTrip(tripId);
+
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @PatchMapping("/complete")
+  public ResponseEntity<Void> completeTrip(@RequestParam final String tripId) {
+
+    tripService.completeTrip(tripId);
+
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 
   @GetMapping("/{id}")
   public ResponseEntity<TripDto> getTrip(@PathVariable final String id) {

@@ -1,6 +1,6 @@
 package com.ride.wave.driver.dto;
 
-import com.ride.wave.driver.enums.DriverStatus;
+import com.ride.wave.shared.enums.DriverStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +16,5 @@ public class DriverDto {
   private String name;
   private String vehicle;
   private DriverStatus status;
+  private String lastAssignedTripId;
 }

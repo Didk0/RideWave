@@ -4,21 +4,25 @@ import com.ride.wave.rider.dto.request.CreateRideRequest;
 import com.ride.wave.rider.dto.response.RideRequestDto;
 import com.ride.wave.rider.entity.RideRequest;
 import com.ride.wave.rider.entity.Rider;
-import com.ride.wave.rider.enums.RideStatus;
 import com.ride.wave.rider.repository.RideRequestRepository;
 import com.ride.wave.rider.repository.RiderRepository;
-import com.ride.wave.rider.service.RideRequestProducer;
 import com.ride.wave.rider.service.RideRequestService;
+import com.ride.wave.rider.service.producer.RideRequestProducer;
 import com.ride.wave.shared.dto.event.RideRequestedEvent;
+import com.ride.wave.shared.dto.event.RideStatusUpdateEvent;
+import com.ride.wave.shared.enums.RideStatus;
 import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RideRequestServiceImpl implements RideRequestService {
 
   private final RideRequestRepository rideRequestRepository;
@@ -87,5 +91,22 @@ public class RideRequestServiceImpl implements RideRequestService {
     return requests.stream()
         .map(rideRequest -> modelMapper.map(rideRequest, RideRequestDto.class))
         .toList();
+  }
+
+  @Override
+  @Transactional
+  public void updateRiderStatus(final RideStatusUpdateEvent event) {
+
+    final RideRequest rideRequest =
+        rideRequestRepository
+            .findById(event.rideRequestId())
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "RideRequest with id " + event.rideRequestId() + " not found"));
+
+    rideRequest.setStatus(event.status());
+
+    rideRequestRepository.save(rideRequest);
   }
 }

@@ -16,4 +16,10 @@ public interface TripService {
   void deleteTrip(String id);
 
   void updateTripAfterDriverAssignment(DriverAssignedEvent event);
+
+  void startTrip(String tripId);
+
+  void rejectTrip(String tripId);
+
+  void completeTrip(String tripId);
 }
