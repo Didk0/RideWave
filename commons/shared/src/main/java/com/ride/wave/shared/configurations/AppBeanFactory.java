@@ -1,4 +1,4 @@
-package com.ride.wave.rider.configurations;
+package com.ride.wave.shared.configurations;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
